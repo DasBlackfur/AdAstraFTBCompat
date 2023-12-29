@@ -3,7 +3,7 @@
   "minVersion": "0.8",
   "package": "me.blackfur.adastraftbcompat.mixin",
   "compatibilityLevel": "JAVA_8",
-  "refmap": "AdAstraFTBCompat.refmap.json",
+  "refmap": "adastraftbcompat.refmap.json",
   "mixins": [
     "DimensionTeleportMixin",
     "NetherPortalPlacementAccessor"
