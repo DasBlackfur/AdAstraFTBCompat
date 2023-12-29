@@ -165,13 +165,13 @@ dependencies {
     implementation fg.deobf("curse.maven:ftb-teams-forge-404468:4611938")
 
     implementation fg.deobf("dev.ftb.mods:ftb-team-dimensions:1.1.4")
-    implementation fg.deobf("curse.maven:ftb-library-forge-404465:4661834")
-    implementation fg.deobf("curse.maven:architectury-api-419699:4555749")
+    runtimeOnly fg.deobf("curse.maven:ftb-library-forge-404465:4661834")
+    runtimeOnly fg.deobf("curse.maven:architectury-api-419699:4555749")
 
     implementation fg.deobf("curse.maven:ad-astra-635042:4643668")
-    implementation fg.deobf("curse.maven:resourceful-lib-570073:4477753")
-    implementation fg.deobf("curse.maven:botarium-704113:4306551")
-    implementation fg.deobf("curse.maven:resourceful-config-714059:4444198")
+    runtimeOnly fg.deobf("curse.maven:resourceful-lib-570073:4477753")
+    runtimeOnly fg.deobf("curse.maven:botarium-704113:4306551")
+    runtimeOnly fg.deobf("curse.maven:resourceful-config-714059:4444198")
 
     // Example mod dependency using a mod jar from ./libs with a flat dir repository
     // This maps to ./libs/coolmod-${mc_version}-${coolmod_version}.jar

@@ -43,8 +43,8 @@ public class DimensionTeleportMixin {
     @ModifyVariable(
             method = "teleportToLevel",
             at = @At("HEAD"),
-            remap = false,
-            argsOnly = true
+            argsOnly = true,
+            remap = false
     )
     private static ResourceKey<Level> modifyTargetDimension(ResourceKey<Level> targetWorld) {
         adAstraFTBCompat$blockPos = null;
@@ -67,8 +67,7 @@ public class DimensionTeleportMixin {
 
     @Redirect(
             method = "teleportToLevel",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;getX()D"),
-            remap = false
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;getX()D")
     )
     private static double modifyXPos(Entity instance) {
         if (adAstraFTBCompat$blockPos != null) {
@@ -79,8 +78,7 @@ public class DimensionTeleportMixin {
 
     @Redirect(
             method = "teleportToLevel",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;getZ()D"),
-            remap = false
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;getZ()D")
     )
     private static double modifyZPos(Entity instance) {
         if (adAstraFTBCompat$blockPos != null) {
