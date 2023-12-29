@@ -8,7 +8,7 @@ import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.gen.Invoker;
 
-@Mixin(NetherPortalPlacement.class)
+@Mixin(value = NetherPortalPlacement.class, remap = false)
 public interface NetherPortalPlacementAccessor {
     @Invoker
     static BlockPos callGetBasePos(ServerPlayer serverPlayer, @Nullable Team team) {
