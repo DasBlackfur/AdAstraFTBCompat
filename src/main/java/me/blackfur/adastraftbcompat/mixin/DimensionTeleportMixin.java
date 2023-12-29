@@ -23,7 +23,7 @@ import java.util.Objects;
 @Mixin(ModUtils.class)
 public class DimensionTeleportMixin {
     @Unique
-    private static Entity adAstraFTBCompat$entity;
+    private static ServerPlayer adAstraFTBCompat$entity = null;
     @Unique
     private static BlockPos adAstraFTBCompat$blockPos = null;
     @Inject(
@@ -32,7 +32,13 @@ public class DimensionTeleportMixin {
             remap = false
     )
     private static void dummyInject(ResourceKey<Level> targetWorld, Entity entity, CallbackInfo ci) {
-        DimensionTeleportMixin.adAstraFTBCompat$entity = entity;
+        adAstraFTBCompat$entity = null;
+        if (entity instanceof ServerPlayer serverPlayer) {
+            adAstraFTBCompat$entity = serverPlayer;
+        }
+        if (entity.getFirstPassenger() instanceof ServerPlayer serverPlayer) {
+            adAstraFTBCompat$entity = serverPlayer;
+        }
     }
     @ModifyVariable(
             method = "teleportToLevel",
@@ -42,20 +48,26 @@ public class DimensionTeleportMixin {
     )
     private static ResourceKey<Level> modifyTargetDimension(ResourceKey<Level> targetWorld) {
         adAstraFTBCompat$blockPos = null;
-        if (targetWorld.equals(Level.OVERWORLD) && adAstraFTBCompat$entity instanceof ServerPlayer player) {
-            ResourceKey<Level> dimension = DimensionsManager.INSTANCE.getDimension(player);
+        if (targetWorld.equals(Level.OVERWORLD) && adAstraFTBCompat$entity != null) {
+            ResourceKey<Level> dimension = DimensionsManager.INSTANCE.getDimension(adAstraFTBCompat$entity);
             if (dimension != null) {
                 adAstraFTBCompat$blockPos = Objects.requireNonNull(
                         DimensionStorage.get()).getDimensionSpawnLocation(dimension.location());
                 return dimension;
             }
         }
+        if (targetWorld.location().getNamespace().equals("ad_astra") && adAstraFTBCompat$entity != null) {
+            var worldborder = Objects.requireNonNull(
+                    adAstraFTBCompat$entity.getLevel().getServer().getLevel(targetWorld)).getWorldBorder();
+            var blockPos = NetherPortalPlacementAccessor.callGetBasePos(adAstraFTBCompat$entity, null);
+            adAstraFTBCompat$blockPos = worldborder.clampToBounds(blockPos.getX(), blockPos.getY(), blockPos.getZ());
+        }
         return targetWorld;
     }
 
     @Redirect(
             method = "teleportToLevel",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;getX()D", ordinal = 0),
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;getX()D"),
             remap = false
     )
     private static double modifyXPos(Entity instance) {
@@ -67,7 +79,7 @@ public class DimensionTeleportMixin {
 
     @Redirect(
             method = "teleportToLevel",
-            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;getZ()D", ordinal = 0),
+            at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/Entity;getZ()D"),
             remap = false
     )
     private static double modifyZPos(Entity instance) {

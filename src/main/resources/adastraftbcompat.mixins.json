@@ -5,7 +5,8 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "AdAstraFTBCompat.refmap.json",
   "mixins": [
-    "DimensionTeleportMixin"
+    "DimensionTeleportMixin",
+    "NetherPortalPlacementAccessor"
   ],
   "client": [
   ],
